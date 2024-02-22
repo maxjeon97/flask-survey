@@ -25,27 +25,41 @@ responses = []
 
 @app.get("/")
 def survey_start():
-    title = survey.title
-    instructions = survey.instructions
+    """generates start page for survey"""
 
-    return render_template(
-        "survey_start.html", title=title, instructions=instructions)
+    return render_template("survey_start.html", survey=survey)
 
 
 @app.post("/begin")
 def begin():
+    """redirects to first question page upon pressing start button"""
+
     return redirect("/questions/0")
 
 
-@app.get("/questions/<number>")
+@app.get("/questions/<int:number>")
 def question(number):
-    question = survey.questions[int(number)]
-    return render_template("question.html", prompt=question.prompt, choices=question.choices)
+    """displays question based on its url parameter number"""
+
+    question = survey.questions[number]
+    return render_template("question.html", question=question)
 
 
 @app.post("/answer")
 def handle_answer():
-    responses.append(request.form["answer"])
-    next_question_num = str(len(responses))
-    return redirect(f"/questions/{next_question_num}")
+    """handles question submission, redirects to thank you
+    page when all questions have been answered"""
 
+    responses.append(request.form["answer"])
+
+    if len(responses) == len(survey.questions):
+        return redirect('/thankyou')
+
+    return redirect(f"/questions/{len(responses)}")
+
+
+@app.get('/thankyou')
+def thank_user():
+    """thanks user for completing survey and shows responses"""
+
+    return render_template("completion.html", questions=survey.questions, responses=responses)
