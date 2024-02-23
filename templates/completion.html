@@ -3,6 +3,11 @@
 {% block content %}
 
   <h1>Thanks for completing this survey!</h1>
+
+  {% for msg in get_flashed_messages() %}
+    <h3 style="color: blue;">{{ msg }}</h3>
+  {% endfor %}
+
   <ul>
     {% for question in questions %}
     <li><b>{{ question.prompt }}</b> {{ responses[loop.index0] }}</li>

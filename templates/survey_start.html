@@ -2,6 +2,11 @@
 {% block content %}
 
   <h1>{{ survey.title }}</h1>
+
+  {% for msg in get_flashed_messages() %}
+    <h3 style="color: red;">{{ msg }}</h3>
+  {% endfor %}
+
   <p>
     {{ survey.instructions }}
   </p>

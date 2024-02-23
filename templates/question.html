@@ -3,6 +3,10 @@
 
   <h1>{{ question.prompt }}</h1>
 
+  {% for msg in get_flashed_messages() %}
+    <h3 style="color: red;">{{ msg }}</h3>
+  {% endfor %}
+
   <form action="/answer" method="POST">
 
       {% for choice in question.choices %}
